@@ -1,8 +1,28 @@
 import React, { Component } from 'react'
 import 'regenerator-runtime/runtime'
 import * as web3Client from './api/web3'
+import BounceLoader from 'react-spinners/BounceLoader'
 
-import BounceLoader from 'react-spinners/BounceLoader';
+import Phaser from 'phaser'
+import playGame from './game'
+
+export const config = {
+  type: Phaser.AUTO,
+  parent: 'phaser',
+  width: 400,
+  height: 600,
+  scene: playGame,
+  physics: {
+    default: 'matter',
+    arcade: {
+        gravity: { y: 300 },
+        debug: false
+    }
+  }
+}
+
+const game = new Phaser.Game(config)
+
 
 class App extends React.Component {
   state = {
