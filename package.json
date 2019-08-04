@@ -21,11 +21,13 @@
     "@babel/polyfill": "^7.4.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-spinners": "^0.5.13",
     "typeface-roboto": "^0.0.75",
     "web3": "^1.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
+    "@babel/core": "^7.0.0-0",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "enzyme": "^3.10.0",
