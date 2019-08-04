@@ -1,47 +1,58 @@
-import React from 'react'
-import Web3 from 'web3'
+import React, { Component } from 'react'
 import 'regenerator-runtime/runtime'
+import * as web3Client from './api/web3'
 
-window.addEventListener('load', async () => {
-  let web3Provider
-  if (window.ethereum) {
-      try {
-          // Request account access if needed
-          await ethereum.enable()
-          web3Provider = ethereum
-          document.getElementById('provider').textContent = web3Provider.constructor.name
-      } catch (error) {
-        // User denied account access...
-      }
-  } else if(window.web3) {
-    web3Provider = web3.currentProvider
-    document.getElementById('provider').textContent = web3Provider.constructor.name
-  } else {
-    // If no injected web3/metamask instance is detected, fallback to Truffle
-    web3Provider = new Web3.providers.HttpProvider('http://localhost:9545')
-    document.getElementById('provider').textContent = 'HttpProvider'
+import BounceLoader from 'react-spinners/BounceLoader';
+
+class App extends React.Component {
+  state = {
+    isConnected: false,
+    loading: true,
+    provider: 'None',
+    networkType: 'None',
+    balance: 0
   }
 
-  const web3 = new Web3(web3Provider)
-  web3.eth.net.isListening()
-   .then(() => console.log('is connected'))
-   .catch(e => console.log('Wow. Something went wrong'));
+  componentDidMount() {
+    web3Client.init()
+    .then( async () => {
+      this.setState({
+        loading: false,
+        isConnected: true,
+        provider: web3Client.getProviderName(),
+        networkType: await web3Client.getNetworkType(),
+        balance: await web3Client.getBalance(),
+        accountId: await web3Client.getAccountId()
+     })
+    })
+    .catch(e => console.log('Wow. Something went wrong', e))
+  }
 
-  console.log('web3Provider is', web3 )
-})
-
-const App = () => {
+  render() {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Crypto Stacker</h1>
         </header>
-        <p id="provider"></p>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <p>React version { React.version }</p>
+        Connection:
+        <BounceLoader
+          css={`display:inline;`}
+          sizeUnit={'rem'}
+          size={1}
+          color={this.state.loading?'red':'green'}
+        />
+        { this.state.isConnected &&
+          <div>
+            <p>Account Id: { this.state.accountId }</p>
+            <p>Provider: { this.state.provider }</p>
+            <p>Network type: { this.state.networkType }</p>
+            <p>Balance: { this.state.balance }</p>
+          </div>
+        }
       </div>
-    );
+    )
+  }
 }
 
 export default App
