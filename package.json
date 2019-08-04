@@ -14,11 +14,14 @@
   "jest": {
     "rootDir": "src",
     "setupFilesAfterEnv": [
-      "./setupTests.js"
+      "./setupTests.js",
+      "jest-canvas-mock"
     ]
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
+    "matter-js": "^0.14.2",
+    "phaser": "^3.18.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-spinners": "^0.5.13",
@@ -33,6 +36,7 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "jest": "^24.8.0",
+    "jest-canvas-mock": "^2.1.0",
     "parcel-bundler": "^1.12.3"
   }
 }
