@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 
 class playGame extends Phaser.Scene {
-  TIMELIMIT = 3
+  TIMELIMIT = 10
 
   constructor() {
     super('CryptoStacker')
@@ -15,9 +15,11 @@ class playGame extends Phaser.Scene {
 
   create() {
     this.matter.world.setBounds(0, -200, this.game.config.width, this.game.config.height + 200)
-    this.gameObjects = this.add.group()
+    this.crates = this.add.group()
+    this.texts = this.add.group()
 
     this.timerText = this.add.bitmapText(2, 0, 'font', this.timeLimit)
+    this.shouldDetectCollision = false
 
     this.timer = this.time.addEvent({
       delay: 1000,
@@ -28,7 +30,7 @@ class playGame extends Phaser.Scene {
 
     this.input.on('pointerup', (pointer) => {
       if(this.finish) {
-        this.restartGame()
+        //this.restartGame()
       } else {
         if(this.crate.visible) {
           this.createCrate()
@@ -37,14 +39,13 @@ class playGame extends Phaser.Scene {
     })
 
     this.matter.world.on("collisionstart", event => {
-      if(this.finish) return
-
       event.pairs.forEach(pair => {
         const { bodyA, bodyB } = pair
         if(bodyA.id == this.currentId || bodyB.id == this.currentId) {
           if(!this.crate.visible) {
             this.crateTween.resume()
             this.crate.setVisible(true)
+            this.shouldDetectCollision = false
           }
         }
       })
@@ -62,12 +63,11 @@ class playGame extends Phaser.Scene {
   }
 
   tick() {
-    if(this.finish) return
-
     this.timeLimit = this.timeLimit - 1
     this.timerText.text = this.timeLimit
 
-    if(this.timeLimit == 0) {
+    if(this.timeLimit <= 0) {
+      this.timerText.text = 0
       this.stopGame()
     }
   }
@@ -75,13 +75,36 @@ class playGame extends Phaser.Scene {
   stopGame() {
     this.finish = true
     this.crateTween.pause()
-    this.timer.paused = true
 
-    // calc score and post to leaderboard
-    this.gameObjects.addMultiple([
-      this.add.bitmapText(this.game.config.width / 2, 200, 'font', 'Posting to leaderboard...').setOrigin(0.5).setScale(0.7),
-      this.add.bitmapText(this.game.config.width / 2, 250, 'font', 'Please wait...').setOrigin(0.5).setScale(0.7)
-    ])
+    if(this.bodiesStopMoving()) {
+      this.timer.paused = true
+
+      let height = this.calcStackHeight()
+
+      this.texts.addMultiple([
+        this.add.bitmapText(this.game.config.width / 2, 170, 'font', `Your score: ${height}`).setOrigin(0.5).setScale(0.7),
+        this.add.bitmapText(this.game.config.width / 2, 200, 'font', 'Posting to leaderboard...').setOrigin(0.5).setScale(0.7),
+        this.add.bitmapText(this.game.config.width / 2, 250, 'font', 'Please wait...').setOrigin(0.5).setScale(0.7)
+      ])
+    }
+  }
+
+  bodiesStopMoving() {
+    const bodies = this.matter.world.engine.world.bodies
+    const total = bodies.reduce( (total, body) => total + body.velocity.x + body.velocity.y, 0)
+    return total > -1 && total < 1
+  }
+
+  calcStackHeight() {
+    let height = this.game.config.height
+    this.crates.children.each(crate => {
+      const pos = crate.y
+      if(height > crate.y) {
+        height = crate.y
+      }
+    })
+    height = this.game.config.height - height
+    return Math.ceil(height).toFixed(0)
   }
 
   restartGame() {
@@ -90,7 +113,8 @@ class playGame extends Phaser.Scene {
     this.timer.paused = false
     this.crateTween.resume()
     this.crate.setVisible(true)
-    this.gameObjects.clear(true, true)
+    this.texts.clear(true, true)
+    this.crates.clear(true, true)
     this.finish = false
   }
 
@@ -100,9 +124,10 @@ class playGame extends Phaser.Scene {
 
     const sprite = this.matter.add.sprite(this.crate.x, this.crate.y, 'crate')
     sprite.setScale(0.5)
-    this.gameObjects.add(sprite)
+    this.crates.add(sprite)
 
     this.currentId = sprite.body.id
+    this.shouldDetectCollision = true
   }
 }
 
