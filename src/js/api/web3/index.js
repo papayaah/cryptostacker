@@ -1,4 +1,5 @@
 import Web3 from 'web3'
+import Contract from 'truffle-contract'
 
 let web3, web3Provider, accountId
 
@@ -43,4 +44,21 @@ export const getBalance = async () => {
 export const getNetworkType = async () => {
   const networkType = await web3.eth.net.getNetworkType()
   return networkType
+}
+
+export const getContractInstance = async () => {
+  const scoreToken = require('../../../contracts/ScoreToken.json')
+  console.log('scoreToken', scoreToken)
+  const scoreTokenContract = Contract(scoreToken)
+  scoreTokenContract.setProvider(web3Provider)
+
+  // const artifact = artifacts.require(contractName) // globally injected artifacts helper
+  // const deployedAddress = artifact.networks[artifact.network_id].address
+  // const instance = new web3.eth.Contract(artifact.abi, deployedAddress)
+  const instance = await scoreTokenContract.deployed()
+  return instance
+}
+
+export const getWeb3 = () => {
+  return web3
 }

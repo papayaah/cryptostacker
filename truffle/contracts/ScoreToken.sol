@@ -10,4 +10,14 @@ import '@openzeppelin/contracts/math/SafeMath.sol';
  */
 contract ScoreToken is ERC721Full, Ownable {
   constructor() ERC721Full("ScoreToken", "STAC") public {}
+
+  mapping (address => uint) public scoreToOwner;
+
+  function setScore(uint score) public {
+    scoreToOwner[msg.sender] = score;
+  }
+
+  function getScore(address) external view returns (uint) {
+    return scoreToOwner[msg.sender];
+  }
 }

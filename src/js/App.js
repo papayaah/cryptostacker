@@ -44,6 +44,43 @@ class App extends React.Component {
         balance: await web3Client.getBalance(),
         accountId: await web3Client.getAccountId()
      })
+
+    const web3 = web3Client.getWeb3()
+    const contract = await web3Client.getContractInstance()
+    console.log(contract)
+    var myContract = new web3.eth.Contract(contract.abi, contract.address);
+    console.log(myContract)
+    const res = await myContract.methods.setScore(55).send({ from: this.state.accountId})
+    console.log('setScore', res)
+    const res2 = await myContract.methods.getScore(this.state.accountId).call()
+    console.log('getScore', res2)
+    //contract.totalSupply().then(d => console.log(d))
+
+    console.log(web3.utils.toWei('0.05', 'ether'))
+
+    web3.eth.sendTransaction({
+      from: this.state.accountId,
+      to: contract.address,
+      value: web3.utils.toWei('0.05', 'ether')
+    })
+    .on('transactionHash', function(hash){
+      console.log('transactionHash', hash)
+    })
+    .on('receipt', function(receipt){
+      console.log('receipt', receipt)
+    })
+    .on('confirmation', function(confirmationNumber, receipt){
+      console.log('confirmationNumber', confirmationNumber, receipt)
+    })
+    .on('error', (error, receipt) => { console.log('error', error, receipt) } ) // If a out of gas error, the second parameter is the receipt.
+
+    //contract.sendTransaction()
+    // contract.send(web3.utils.toWei('0.05', 'ether')).then(function(result) {
+    //   console.log('result', result)
+    // }).catch(e  => console.log('Transaction failed', e))
+
+    //  const myContract = getInstance('ScoreToken')
+    //  console.log(myContract)
     })
     .catch(e => console.log('Wow. Something went wrong', e))
   }

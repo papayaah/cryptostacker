@@ -2,6 +2,12 @@
 
 Classic Stacker game. User submits their high score to a blockchain.
 
+## Requirements
+
+- Node >= 8.0.0 <= 11.15.0
+- Yarn - on Mac install with `brew install yarn`
+- Truffle - install with `yarn global add truffle`
+
 ## Install
 
 1. Clone the repo
@@ -17,6 +23,29 @@ yarn
 
 ## Usage
 
+Run the crypto game with
 ```
-Run the crypto game with `yarn dev`
+yarn dev
 ```
+
+## Production
+
+To build for production:
+
+```
+yarn build
+```
+
+Parcel will create a `dist` folder containing all the necessary files. You can deploy this anywhere that serves static assets.
+
+## Tech Stack
+- [React 16.8.6](https://github.com/facebook/react) - JS component-based framework for building the UI.
+- [Phaser3.18.1](https://github.com/photonstorm/phaser/releases) - 2D game framework use to build the game
+- [Jest](https://github.com/facebook/jest) - JS testing framework
+- [Enzyme](https://github.com/airbnb/enzyme) - makes testing React components easier
+- [jest-canvas-mock](https://github.com/hustcc/jest-canvas-mock) - for testing Canvas
+- [@babel/plugin-proposal-class-properties](https://babeljs.io/docs/en/babel-plugin-proposal-class-properties) - allow declaration of `state` in your class instead of in the `constructor`
+- [Parcel](https://github.com/parcel-bundler/parcel) - build and bundling tool
+- [web3.js](https://github.com/ethereum/web3.js/) - ethereum JS api
+- [truffle](https://github.com/trufflesuite/truffle) - tool for developing smart contracts
+- [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts) - interface for the ERC721
