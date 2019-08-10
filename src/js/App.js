@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import 'regenerator-runtime/runtime'
-import * as web3Client from './api/web3'
+import { Web3Client } from './api/web3'
 import BounceLoader from 'react-spinners/BounceLoader'
-
+import DetectMetamask from './components/detect-metamask'
 import Phaser from 'phaser'
 import playGame from './game'
 
@@ -23,7 +23,6 @@ export const config = {
 
 const game = new Phaser.Game(config)
 
-
 class App extends React.Component {
   state = {
     isConnected: false,
@@ -34,6 +33,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    return
+
     web3Client.init()
     .then( async () => {
       this.setState({
@@ -92,6 +93,7 @@ class App extends React.Component {
           <h1 className="App-title">Crypto Stacker</h1>
         </header>
         <p>React version { React.version }</p>
+        <DetectMetamask></DetectMetamask>
         Connection:
         <BounceLoader
           css={`display:inline;`}

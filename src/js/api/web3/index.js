@@ -3,6 +3,63 @@ import Contract from 'truffle-contract'
 
 let web3, web3Provider, accountId
 
+let instance = null
+export class Web3Client {
+  contructor() {
+    if(!instance) {
+      instance = this
+    }
+
+    return instance
+  }
+
+  static async getInstance() {
+    const web3Client = new Web3Client()
+    await web3Client.init()
+    return web3Client
+  }
+
+  static metamaskInstalled() {
+    return window.ethereum || window.web3
+  }
+
+  async getAccountId() {
+    if(!this.accountId) {
+      const accounts = await this.web3.eth.getAccounts()
+      this.accountId = accounts[0]
+    }
+    return this.accountId
+  }
+
+  async isListening() {
+    const result = await this.web3.eth.net.isListening()
+    return result
+  }
+
+  async connectMetamask() {
+    await ethereum.enable()
+  }
+
+  async init() {
+    if (window.ethereum) {
+      try {
+          // Request account access if needed
+          //await ethereum.enable()
+          this.web3Provider = ethereum
+      } catch (error) {
+        // User denied account access...
+      }
+    } else if(window.web3) {
+      this.web3Provider = web3.currentProvider
+    } else {
+      // If no injected web3/metamask instance is detected, fallback to Truffle
+      this.web3Provider = new Web3.providers.HttpProvider('http://localhost:9545')
+    }
+
+    this.web3 = new Web3(this.web3Provider)
+  }
+}
+
 export const init = async () => {
   if (window.ethereum) {
       try {
