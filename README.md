@@ -23,10 +23,27 @@ yarn
 
 ## Usage
 
-Run the crypto game with
+1. Start truffle:
+
+```
+cd truffle && truffle develop
+```
+
+2. In the truffle prompt, deploy the contract
+
+```
+deploy
+```
+
+3. Run the crypto game
+
 ```
 yarn dev
 ```
+
+## Metamask connection
+
+Make sure your Metamask is connected to your local Truffle server.
 
 ## Production
 

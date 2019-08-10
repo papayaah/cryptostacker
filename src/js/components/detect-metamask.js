@@ -26,7 +26,7 @@ export default class DetectMetamask extends React.Component {
            this.setState({locked: false})
          }
       })
-   }
+    }
   }
 
   connectMetamask() {
@@ -41,7 +41,7 @@ export default class DetectMetamask extends React.Component {
       <div>
       { this.state.noWeb3 &&
         <div>
-          <p>In order to submit score, you will need to install <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en" target="_blank">MetaMask</a>.</p>
+          <p>In order to play and submit your score, you will need to install <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en" target="_blank">MetaMask</a>.</p>
           <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en" target="_blank"><img src={imgMetamask} /></a>
           <p>Once installed, <a href=".">try again</a>.</p>
         </div>

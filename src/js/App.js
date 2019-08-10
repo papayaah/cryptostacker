@@ -33,47 +33,64 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    return
+    if(!Web3Client.metamaskInstalled())
+      return
 
-    web3Client.init()
-    .then( async () => {
-      this.setState({
-        loading: false,
-        isConnected: true,
-        provider: web3Client.getProviderName(),
-        networkType: await web3Client.getNetworkType(),
-        balance: await web3Client.getBalance(),
-        accountId: await web3Client.getAccountId()
-     })
+    Web3Client.getInstance()
+      .then( async (web3Client) => {
+        const accountId = await web3Client.getAccountId()
+        if(accountId) {
+          this.setState({
+            loading: false,
+            isConnected: true,
+            provider: web3Client.getProviderName(),
+            networkType: await web3Client.getNetworkType(),
+            balance: await web3Client.getBalance(),
+            accountId: await web3Client.getAccountId()
+          })
 
-    const web3 = web3Client.getWeb3()
-    const contract = await web3Client.getContractInstance()
-    console.log(contract)
-    var myContract = new web3.eth.Contract(contract.abi, contract.address);
-    console.log(myContract)
-    const res = await myContract.methods.setScore(55).send({ from: this.state.accountId})
-    console.log('setScore', res)
-    const res2 = await myContract.methods.getScore(this.state.accountId).call()
-    console.log('getScore', res2)
-    //contract.totalSupply().then(d => console.log(d))
+          const scoreContract = await web3Client.getContractInstance()
+          const contract = new web3Client.web3.eth.Contract(scoreContract.abi, scoreContract.address);
+          // const res = await contract.methods.setScore(55).send({ from: accountId})
+          // console.log('setScore', res)
 
-    console.log(web3.utils.toWei('0.05', 'ether'))
+          web3.eth.filter({
+            address: scoreContract.address,
+            from: 0,
+            to: 'latest'
+            }).get(function (err, result) {
+              console.log(err, result)
+          })
+        }
+      })
 
-    web3.eth.sendTransaction({
-      from: this.state.accountId,
-      to: contract.address,
-      value: web3.utils.toWei('0.05', 'ether')
-    })
-    .on('transactionHash', function(hash){
-      console.log('transactionHash', hash)
-    })
-    .on('receipt', function(receipt){
-      console.log('receipt', receipt)
-    })
-    .on('confirmation', function(confirmationNumber, receipt){
-      console.log('confirmationNumber', confirmationNumber, receipt)
-    })
-    .on('error', (error, receipt) => { console.log('error', error, receipt) } ) // If a out of gas error, the second parameter is the receipt.
+    // const web3 = web3Client.getWeb3()
+
+    // var myContract = new web3.eth.Contract(contract.abi, contract.address);
+    // console.log(myContract)
+    // const res = await myContract.methods.setScore(55).send({ from: this.state.accountId})
+    // console.log('setScore', res)
+    // const res2 = await myContract.methods.getScore(this.state.accountId).call()
+    // console.log('getScore', res2)
+    // //contract.totalSupply().then(d => console.log(d))
+
+    // console.log(web3.utils.toWei('0.05', 'ether'))
+
+    // web3.eth.sendTransaction({
+    //   from: this.state.accountId,
+    //   to: contract.address,
+    //   value: web3.utils.toWei('0.05', 'ether')
+    // })
+    // .on('transactionHash', function(hash){
+    //   console.log('transactionHash', hash)
+    // })
+    // .on('receipt', function(receipt){
+    //   console.log('receipt', receipt)
+    // })
+    // .on('confirmation', function(confirmationNumber, receipt){
+    //   console.log('confirmationNumber', confirmationNumber, receipt)
+    // })
+    // .on('error', (error, receipt) => { console.log('error', error, receipt) } ) // If a out of gas error, the second parameter is the receipt.
 
     //contract.sendTransaction()
     // contract.send(web3.utils.toWei('0.05', 'ether')).then(function(result) {
@@ -82,8 +99,7 @@ class App extends React.Component {
 
     //  const myContract = getInstance('ScoreToken')
     //  console.log(myContract)
-    })
-    .catch(e => console.log('Wow. Something went wrong', e))
+
   }
 
   render() {
@@ -94,7 +110,7 @@ class App extends React.Component {
         </header>
         <p>React version { React.version }</p>
         <DetectMetamask></DetectMetamask>
-        Connection:
+        Ethereum Blockchain Connection:
         <BounceLoader
           css={`display:inline;`}
           sizeUnit={'rem'}
