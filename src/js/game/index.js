@@ -1,11 +1,13 @@
 import Phaser from 'phaser'
+import { Web3Client } from '../api/web3'
+import { EventEmitter } from '../services/events'
 
-class playGame extends Phaser.Scene {
-  TIMELIMIT = 10
+class Game extends Phaser.Scene {
+  static TIMELIMIT = 2
 
   constructor() {
     super('CryptoStacker')
-    this.timeLimit = this.TIMELIMIT
+    this.timeLimit = Game.TIMELIMIT
   }
 
   preload() {
@@ -30,7 +32,7 @@ class playGame extends Phaser.Scene {
 
     this.input.on('pointerup', (pointer) => {
       if(this.finish) {
-        //this.restartGame()
+        // this.restartGame()
       } else {
         if(this.crate.visible) {
           this.createCrate()
@@ -86,6 +88,8 @@ class playGame extends Phaser.Scene {
         this.add.bitmapText(this.game.config.width / 2, 200, 'font', 'Posting to leaderboard...').setOrigin(0.5).setScale(0.7),
         this.add.bitmapText(this.game.config.width / 2, 250, 'font', 'Please wait...').setOrigin(0.5).setScale(0.7)
       ])
+
+      this.submitScore(height)
     }
   }
 
@@ -108,8 +112,8 @@ class playGame extends Phaser.Scene {
   }
 
   restartGame() {
-    this.timeLimit = this.TIMELIMIT
-    this.timerText.text = this.timeLimit
+    this.timeLimit = Game.TIMELIMIT
+    this.timerText.text = Game.TIMELIMIT
     this.timer.paused = false
     this.crateTween.resume()
     this.crate.setVisible(true)
@@ -129,6 +133,23 @@ class playGame extends Phaser.Scene {
     this.currentId = sprite.body.id
     this.shouldDetectCollision = true
   }
+
+  submitScore(score) {
+    if(!Web3Client.metamaskInstalled())
+      return
+
+    Web3Client.getInstance()
+      .then( async (web3Client) => {
+        const accountId = await web3Client.getAccountId()
+        if(accountId) {
+          const scoreContract = await web3Client.getContractInstance()
+          const contract = new web3Client.web3.eth.Contract(scoreContract.abi, scoreContract.address)
+          const result = await contract.methods.setScore(score).send({ from: accountId})
+
+          EventEmitter.dispatch('transactionReceipt', result.transactionHash)
+        }
+      })
+  }
 }
 
-export default playGame;
+export default Game;

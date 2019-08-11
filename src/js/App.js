@@ -4,14 +4,15 @@ import { Web3Client } from './api/web3'
 import BounceLoader from 'react-spinners/BounceLoader'
 import DetectMetamask from './components/detect-metamask'
 import Phaser from 'phaser'
-import playGame from './game'
+import Game from './game'
+import { EventEmitter } from './services/events'
 
 export const config = {
   type: Phaser.AUTO,
   parent: 'game',
   width: 400,
   height: 600,
-  scene: playGame,
+  scene: Game,
   physics: {
     default: 'matter',
     arcade: {
@@ -50,24 +51,20 @@ class App extends React.Component {
             accountId: await web3Client.getAccountId()
           })
 
-          const scoreContract = await web3Client.getContractInstance()
-          const contract = new web3Client.web3.eth.Contract(scoreContract.abi, scoreContract.address);
-          const res = await contract.methods.setScore(55).send({ from: accountId})
-          // console.log('setScore', res)
-
-          const web3 = web3Client.web3
-          const receipt = await web3.eth.getTransactionReceipt(res.transactionHash)
-          this.setState({transactionReceipt: JSON.stringify(receipt, null, 2) })
-          // console.log('receipt', receipt)
+          EventEmitter.subscribe('transactionReceipt', async (transactionHash) => {
+            const web3 = web3Client.web3
+            const receipt = await web3.eth.getTransactionReceipt(transactionHash)
+            this.setState({transactionReceipt: JSON.stringify(receipt, null, 2) })
+          })
         }
       })
   }
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Crypto Stacker</h1>
+      <div>
+        <header>
+          <h1>Crypto Stacker</h1>
         </header>
         <div className="row">
           <div className="col">
@@ -91,10 +88,13 @@ class App extends React.Component {
                 <p>Balance: { this.state.balance }</p>
               </div>
             }
-            <pre className="receipt">
-              Transaction Receipt:
-              {this.state.transactionReceipt}
-            </pre>
+            { this.state.receipt &&
+              <pre className="receipt">
+                Transaction Receipt:
+
+                {this.state.transactionReceipt}
+              </pre>
+            }
           </div>
         </div>
       </div>

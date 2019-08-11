@@ -57,7 +57,6 @@ export class Web3Client {
 
   async getContractInstance() {
     const scoreToken = require('../../../../truffle/build/contracts/ScoreToken.json')
-    console.log('scoreToken', scoreToken)
     const scoreTokenContract = Contract(scoreToken)
     scoreTokenContract.setProvider(this.web3Provider)
 
