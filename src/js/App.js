@@ -88,7 +88,7 @@ class App extends React.Component {
                 <p>Balance: { this.state.balance }</p>
               </div>
             }
-            { this.state.receipt &&
+            { this.state.transactionReceipt &&
               <pre className="receipt">
                 Transaction Receipt:
 
