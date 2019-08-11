@@ -16,7 +16,10 @@
     "setupFilesAfterEnv": [
       "./setupTests.js",
       "jest-canvas-mock"
-    ]
+    ],
+    "moduleNameMapper": {
+      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "identity-obj-proxy"
+    }
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
@@ -37,6 +40,7 @@
     "@babel/preset-react": "^7.0.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^24.8.0",
     "jest-canvas-mock": "^2.1.0",
     "parcel-bundler": "^1.12.3"
