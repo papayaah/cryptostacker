@@ -1,3 +1,24 @@
+html {
+  display: table;
+  margin: auto;
+}
+
 body {
+  display: table-cell;
   font-family: 'Roboto', sans-serif;
+  vertical-align: middle;
+}
+
+.row {
+  display: flex;
+}
+
+.col {
+  flex: 50%;
+}
+
+.receipt {
+  height: 300px;
+  overflow: auto;
+  max-width: 400px;
 }
