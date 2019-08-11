@@ -1,6 +1,8 @@
 # Crypto Stacker
 
-Classic Stacker game. User submits their high score to a blockchain.
+Classic Stacker game. User submits their high score to a blockchain through a Solidity contract.
+
+![Alt text](screenshots/main.png?raw=true "Crypto game screenshot")
 
 ## Requirements
 
@@ -45,6 +47,8 @@ yarn dev
 
 Make sure your Metamask is connected to your local Truffle server.
 
+![Alt text](screenshots/customrpc.png?raw=true "Custom RPC")
+
 ## Production
 
 To build for production:
@@ -53,7 +57,7 @@ To build for production:
 yarn build
 ```
 
-Parcel will create a `dist` folder containing all the necessary files. You can deploy this anywhere that serves static assets.
+Parcel will create a `dist` folder containing all the necessary files. You can deploy this anywhere that serve static assets.
 
 ## Tech Stack
 - [React 16.8.6](https://github.com/facebook/react) - JS component-based framework for building the UI.

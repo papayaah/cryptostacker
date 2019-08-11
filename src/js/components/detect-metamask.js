@@ -3,6 +3,10 @@ import { Web3Client } from '../api/web3'
 
 import imgMetamask from '../../img/metamask.png'
 
+const imgStyle = {
+  width: '300px'
+}
+
 export default class DetectMetamask extends React.Component {
   state = {
     noWeb3: true,
@@ -42,7 +46,7 @@ export default class DetectMetamask extends React.Component {
       { this.state.noWeb3 &&
         <div>
           <p>In order to play and submit your score, you will need to install <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en" target="_blank">MetaMask</a>.</p>
-          <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en" target="_blank"><img src={imgMetamask} /></a>
+          <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en" target="_blank"><img src={imgMetamask} style={imgStyle} /></a>
           <p>Once installed, <a href=".">try again</a>.</p>
         </div>
       }

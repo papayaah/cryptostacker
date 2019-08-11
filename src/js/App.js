@@ -75,7 +75,7 @@ class App extends React.Component {
             <DetectMetamask></DetectMetamask>
             Ethereum Blockchain Connection:
             <BounceLoader
-              css={`display:inline;`}
+              css={`display:inline;top:0.15rem;left:0.25rem;`}
               sizeUnit={'rem'}
               size={1}
               color={this.state.loading?'red':'green'}

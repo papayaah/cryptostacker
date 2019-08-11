@@ -3,7 +3,7 @@ import { Web3Client } from '../api/web3'
 import { EventEmitter } from '../services/events'
 
 class Game extends Phaser.Scene {
-  static TIMELIMIT = 2
+  static TIMELIMIT = 60
 
   constructor() {
     super('CryptoStacker')
