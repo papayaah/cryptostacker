@@ -43,6 +43,14 @@ deploy
 yarn dev
 ```
 
+## Tests
+
+Tests are using jest, to run
+
+```
+yarn test
+```
+
 ## Metamask connection
 
 Make sure your Metamask is connected to your local Truffle server.

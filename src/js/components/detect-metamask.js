@@ -36,7 +36,6 @@ export default class DetectMetamask extends React.Component {
   connectMetamask() {
     this.web3Client.connectMetamask()
       .then( res => {
-        console.log('connected', res)
       })
   }
 
@@ -53,7 +52,9 @@ export default class DetectMetamask extends React.Component {
       { ! this.state.noWeb3 && this.state.locked &&
         <div>
           <p>Your MetaMask is locked!</p>
-          <button onClick={this.connectMetamask}>Connect</button>
+          <div className="btndiv">
+            <button className="btnpop" onClick={this.connectMetamask}>Connect Metamask</button>
+          </div>
           <p>Please open MetaMask and follow the instructions to unlock it.</p>
           <p>Once unlocked, <a href=".">try again</a>.</p>
         </div>

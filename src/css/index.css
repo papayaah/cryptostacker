@@ -23,3 +23,48 @@ body {
   overflow: auto;
   max-width: 400px;
 }
+
+
+.btndiv {
+  height: 50px;
+  margin: 2rem;
+}
+
+.btnpop {
+  background: #3777c4;
+  position: relative;
+  padding: 10px 20px;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-bottom: 10px solid #265388;
+  color: white;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-family: Lucida Sans Unicode, sans-serif;
+  vertical-align: middle;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  -webkit-box-shadow:0px 1px 15px 1px #999999;
+  box-shadow:0px 1px 15px 1px #999999;
+   transition: all 0.1s;
+ }
+
+ .btnpop:hover {
+   top: -1px;
+   border-bottom: 12px solid #265388;
+   background: #4984cc;
+ }
+
+ .btnpop:active {
+   top: 8px;
+   border-bottom: 2px solid #265388;
+   background: #4984cc;
+   -webkit-box-shadow:none;
+   box-shadow:none;
+ }
+
+ .btnpop:focus {
+  outline: none;
+ }
