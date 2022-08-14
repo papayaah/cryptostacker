@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
-    "@openzeppelin/contracts": "^2.3.0",
+    "@openzeppelin/contracts": "^4.7.2",
     "matter-js": "^0.14.2",
     "phaser": "^3.18.1",
     "react": "^16.8.6",
